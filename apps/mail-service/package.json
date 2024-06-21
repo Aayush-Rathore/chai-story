@@ -1,0 +1,23 @@
+{
+  "name": "mail-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsc-watch --onSuccess \"node -r dotenv/config --experimental-json-modules dist/index.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bullmq": "^5.8.2",
+    "dotenv": "^16.4.5",
+    "nodemailer": "^6.9.14"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.15",
+    "tsc-watch": "^6.2.0",
+    "typescript": "^5.5.2"
+  }
+}

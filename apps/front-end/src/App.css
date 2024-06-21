@@ -23,3 +23,9 @@
   font-weight: 700;
   font-style: italic;
 }
+
+*::-webkit-scrollbar {
+  display: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

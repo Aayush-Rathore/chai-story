@@ -1,27 +1,29 @@
 import WhiteLogo from "@/assets/whiteLogo.svg";
-import BlackLogo from "@/assets/darkLogo.svg";
+import BlackLogo from "@/assets/blackLogo.svg";
 import { Button } from "@/components/ui/button";
-import { ThemeProviderContext } from "@/components/ui/theme-provider";
-import { useContext } from "react";
 import hiteshSir from "@/assets/hiteshSir.png";
 import { FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 
 const Home = () => {
-  const { theme } = useContext(ThemeProviderContext);
   return (
-    <div className="my-10">
+    <div>
       <section className="flex justify-center h-[50dvh] flex-col items-center gap-10 md:gap-16">
         <img
-          src={theme === "dark" ? WhiteLogo : BlackLogo}
+          src={BlackLogo}
           alt="Mine Story"
-          className="w-64 sm:w-80 md:w-96"
+          className="w-64 sm:w-80 md:w-96 dark:hidden"
+        />
+        <img
+          src={WhiteLogo}
+          alt="Mine Story"
+          className="w-64 sm:w-80 md:w-96 hidden dark:block"
         />
         <Button
           variant="default"
           className="w-60 h-12 font-bold text-base"
-          onClick={() => console.log(theme)}
+          onClick={() => console.log("hello")}
         >
           Start Reading
         </Button>
