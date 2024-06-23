@@ -1,12 +1,14 @@
+import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navbar from "@/components/constants/Navbar";
-import Home from "@/pages/Home.page";
-import Footer from "@/components/constants/Footer";
-import Stories from "@/pages/Stories.page";
-import Story from "@/pages/Story.page";
 import { Toaster } from "@/components/ui/toaster";
-import Verification from "@/pages/Verification.page";
+
+const Home = lazy(() => import("@/pages/Home.page"));
+const Stories = lazy(() => import("@/pages/Stories.page"));
+const Story = lazy(() => import("@/pages/Story.page"));
+const Profile = lazy(() => import("@/pages/Profile.page"));
+const Verification = lazy(() => import("@/pages/Verification.page"));
 
 function App() {
   return (
@@ -14,14 +16,16 @@ function App() {
       <Navbar />
       <Toaster />
       <div className="px-2 md:px-6">
-        <Routes>
-          <Route path="/" Component={Home} />
-          <Route path="/stories" Component={Stories} />
-          <Route path="/stories/:id" Component={Story} />
-          <Route path="auth/:token" Component={Verification} />
-        </Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/" Component={Home} />
+            <Route path="/stories" Component={Stories} />
+            <Route path="/profile/:username" Component={Profile} />
+            <Route path="/stories/:id" Component={Story} />
+            <Route path="/auth/:token" Component={Verification} />
+          </Routes>
+        </Suspense>
       </div>
-      <Footer />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import ApiResponse from "../utilities/apiResponse.utility";
 import publicServices from "../services/public.services";
 import { Request, Response } from "express";
 
@@ -18,6 +19,18 @@ class PublicControllers {
       data: storyData,
       authorDetails: { username: "Aayush", profile: null },
     });
+  }
+
+  public async userProfile(req: Request, res: Response) {
+    const username = req.params.username;
+    const profile = await publicServices.userProfile(username);
+    new ApiResponse(
+      201,
+      "SUCCESS!",
+      "User details is available!",
+      profile,
+      res
+    );
   }
 }
 

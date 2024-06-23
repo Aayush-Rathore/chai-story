@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSignUp, useSignIn } from "@/api/authFunction";
 import {
   Form,
@@ -31,8 +31,6 @@ import {
 } from "@/components/ui/form";
 import formValidation from "@/validations/form.validations";
 import { useForm } from "react-hook-form";
-import useStore from "@/store/zustand.store";
-import Cookies from "js-cookie";
 
 function DialogBox({ children }: { children: React.ReactNode }) {
   const signUpForm = useForm<TSignUp>({
@@ -47,30 +45,15 @@ function DialogBox({ children }: { children: React.ReactNode }) {
   const signInForm = useForm<TSignIn>({
     resolver: zodResolver(formValidation.SignIn),
     defaultValues: {
-      email: "",
+      id: "",
       password: "",
     },
   });
 
   const [isPassVisible, setPassVisible] = useState<boolean>(false);
 
-  const { setUser } = useStore((e) => e);
-
-  const { mutate: SignUp, data: signUpData } = useSignUp();
-  const { mutate: SignIn, data: signInData } = useSignIn();
-
-  useEffect(() => {
-    if (signUpData?.data) {
-      setUser(signUpData.data.token);
-    }
-  }, [signUpData, setUser]);
-
-  useEffect(() => {
-    if (signInData?.data) {
-      setUser(signInData.data.token);
-      Cookies.set("userToken", signInData.data.token, { expires: 7 }); // Expires in 7 days
-    }
-  }, [signInData, setUser]);
+  const { mutate: SignUp } = useSignUp();
+  const { mutate: SignIn } = useSignIn();
 
   return (
     <Dialog>
@@ -110,12 +93,16 @@ function DialogBox({ children }: { children: React.ReactNode }) {
                   >
                     <FormField
                       control={signInForm.control}
-                      name="email"
+                      name="id"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel>Email or Username</FormLabel>
                           <FormControl>
-                            <Input placeholder="Email" {...field} required />
+                            <Input
+                              placeholder="Email or Username"
+                              {...field}
+                              required
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

@@ -1,4 +1,4 @@
-import { Document, Schema, model } from "mongoose";
+import mongoose, { Document, Schema, model } from "mongoose";
 
 export enum StoryCategory {
   Motivational = "motivational",
@@ -12,12 +12,19 @@ export interface IStory extends Document {
   mdx: string;
   likes: number;
   category: StoryCategory;
+  owner: mongoose.Types.ObjectId;
 }
 
 const StoriesSchema = new Schema(
   {
     title: {
       type: String,
+      required: true,
+    },
+
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
 

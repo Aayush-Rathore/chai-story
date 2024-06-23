@@ -1,35 +1,36 @@
-import { useParams } from "react-router-dom";
-import Home from "./Home.page";
+import { useNavigate, useParams } from "react-router-dom";
 import { useVerifyEmail } from "@/api/authFunction";
-import { Error, Loading, Success } from "@/components/constants/Progress";
-import { toast } from "@/components/ui/use-toast";
+import Alert from "@/components/constants/Progress";
+import { Button } from "@/components/ui/button";
 
 const Verification = () => {
+  const navigate = useNavigate();
   const { token } = useParams<{ token: string }>();
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+
   const { data: verificationData, isLoading, error } = useVerifyEmail(token);
 
-  let component: React.ReactNode;
-  if (isLoading) {
-    component = <Loading />;
-  } else if (error) {
-    component = <Error />;
-    toast({
-      title: error.name,
-      description: error.message,
-    });
-  } else if (verificationData) {
-    component = <Success />;
-    toast({
-      title: verificationData.successCode,
-      description: verificationData.successMessage,
-    });
-  }
-
   return (
-    <div>
-      {component}
-      <Home />
+    <div className="flex flex-col gap-3 justify-center items-center">
+      {isLoading ? (
+        <Alert
+          title="Loading"
+          description="Wait! While we process your request!"
+          type="pending"
+        />
+      ) : error ? (
+        <Alert title={error.name} description={error.message} type="alert" />
+      ) : (
+        verificationData && (
+          <>
+            <Alert
+              title={verificationData.successCode}
+              description={verificationData.successMessage}
+              type="success"
+            />
+            <Button onClick={() => navigate("/")}>Enjoy Exploring</Button>
+          </>
+        )
+      )}
     </div>
   );
 };

@@ -10,6 +10,17 @@ class AuthValidations extends BaseValidations {
     })
     .strict();
 
+  public Login = zod.object({
+    id: zod.string().refine((val) => {
+      if (val.includes("@")) {
+        return this.email.safeParse(val).success;
+      }
+
+      return this.username.safeParse(val).success;
+    }),
+    password: this.password,
+  });
+
   public VerifyEmail = zod.object({
     token: this.jwtTokenSchema,
   });

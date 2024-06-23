@@ -51,6 +51,7 @@ export const useStories = (
   return useQuery({
     queryKey: ["stories", page, limit, category],
     queryFn: () => fetchStories({ page, limit, category }),
+    staleTime: Infinity,
   });
 };
 

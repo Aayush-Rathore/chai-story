@@ -1,5 +1,5 @@
 import { MDXProvider } from "@mdx-js/react";
-import StoryFile from "../constants/story.mdx";
+import StoryFile from "../constantsVariables/story.mdx";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
@@ -13,7 +13,9 @@ import { useStoryWithId } from "@/api/getStories";
 import NotFound from "@/components/constants/NotFound";
 
 const Story = () => {
-  const { userAuth } = useStore((e) => e);
+  const { user } = useStore((state) => ({
+    user: state.user,
+  }));
   const { id: storyId } = useParams<{ id: string }>();
 
   if (!storyId) {
@@ -23,7 +25,7 @@ const Story = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data: storyData, isLoading, error } = useStoryWithId(storyId);
   const handleLikeBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (userAuth) {
+    if (user) {
       console.log("Go ahead", e.button);
     } else {
       console.log("verify first");
@@ -86,7 +88,7 @@ const Story = () => {
               &#x2022;
             </div>
             <div className="flex gap-5">
-              {userAuth ? (
+              {user ? (
                 <Button className="flex gap-3" onClick={handleLikeBtn}>
                   Like <FaHeart size={17} />
                 </Button>
@@ -94,17 +96,6 @@ const Story = () => {
                 <DialogBox>
                   <Button className="flex gap-3">
                     Like <FaHeart size={17} />
-                  </Button>
-                </DialogBox>
-              )}
-              {userAuth ? (
-                <Button className="flex gap-3 bg-transparent hover:bg-secondary text-secondary-foreground transition-all duration-150">
-                  Follow
-                </Button>
-              ) : (
-                <DialogBox>
-                  <Button className="flex gap-3 bg-secondary hover:bg-secondary text-secondary-foreground transition-all duration-150">
-                    Follow
                   </Button>
                 </DialogBox>
               )}

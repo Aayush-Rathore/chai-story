@@ -7,9 +7,11 @@ import sendMail from "../utilities/mail.utility";
 class AuthControllers {
   public async signUp(req: Request, res: Response) {
     validate.SingUp(req.body);
-    const { newUser, token } = await authServices.SignUp(req.body);
+    const { email, id, username, token, img } = await authServices.SignUp(
+      req.body
+    );
 
-    sendMail(newUser.username, "verifyEmail", newUser.id, newUser.email);
+    sendMail(username, "verifyEmail", id, email);
 
     res.cookie("accessToken", token, {
       sameSite: "strict",
@@ -22,10 +24,33 @@ class AuthControllers {
       "SUCCESS!",
       "Successfully created new account, Enjoy",
       {
-        message:
-          "Check your inbox and click the provided link to verify you email address!",
-        token: token,
-        user: newUser,
+        token,
+        id,
+        img,
+        username,
+      },
+      res
+    );
+  }
+
+  public async logIn(req: Request, res: Response) {
+    validate.Login(req.body);
+    const { token, id, img, username } = await authServices.Login(req.body);
+    res.cookie("accessToken", token, {
+      sameSite: "strict",
+      httpOnly: true,
+      secure: true,
+    });
+
+    new ApiResponse(
+      201,
+      "SUCCESS!",
+      "Loged In",
+      {
+        token,
+        id,
+        img,
+        username,
       },
       res
     );
@@ -34,8 +59,26 @@ class AuthControllers {
   public async verifyEmail(req: Request, res: Response) {
     const queries = req.query as { token: string };
     validate.VelidateToken(queries);
-    const verificationInfo = await authServices.VerifyEmail(queries);
-    res.send("Hello");
+    const { token, img, id, username } =
+      await authServices.VerifyEmail(queries);
+    res.cookie("accessToken", token, {
+      sameSite: "strict",
+      httpOnly: true,
+      secure: true,
+    });
+
+    new ApiResponse(
+      201,
+      "SUCCESS!",
+      "Verification completed, Enjoy your 'Chai with Stories'",
+      {
+        token,
+        id,
+        img,
+        username,
+      },
+      res
+    );
   }
 }
 

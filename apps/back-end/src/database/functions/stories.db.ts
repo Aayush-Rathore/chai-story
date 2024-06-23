@@ -14,7 +14,7 @@ class StoriesDB {
     const skip = (page - 1) * limit;
     const pipeline = [];
 
-    if (category && category.length > 0) {
+    if (category && category.length > 0 && category !== "all") {
       pipeline.push({ $match: { category } });
     }
 

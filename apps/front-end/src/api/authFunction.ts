@@ -8,25 +8,22 @@ import { useToast } from "@/components/ui/use-toast";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { TSignIn, TSignUp } from "@/types/common.types";
 import Cookies from "js-cookie";
+import useStore from "@/store/zustand.store";
 
-interface ISignupResponse {
+interface IAuthResponse {
   successCode: string;
   data: {
-    message: string;
+    img: string;
     token: string;
-    user: object;
+    id: string;
+    username: string;
   };
   successMessage: string;
 }
 
-interface IVerifyEmailResponse {
-  successCode: string;
-  successMessage: string;
-}
-
-const SignUp = async (userData: TSignUp): Promise<ISignupResponse> => {
-  const response: AxiosResponse<ISignupResponse> =
-    await axios.post<ISignupResponse>(
+const SignUp = async (userData: TSignUp): Promise<IAuthResponse> => {
+  const response: AxiosResponse<IAuthResponse> =
+    await axios.post<IAuthResponse>(
       `${import.meta.env.VITE_END_POINT}/v1/auth/signup`,
       userData
     );
@@ -34,22 +31,30 @@ const SignUp = async (userData: TSignUp): Promise<ISignupResponse> => {
 };
 
 export const useSignUp = (): UseMutationResult<
-  ISignupResponse,
+  IAuthResponse,
   AxiosError<{ error: string; message: string }>,
   TSignUp
 > => {
+  const { setUser } = useStore((state) => ({
+    setUser: state.setUser,
+  }));
   const { toast } = useToast();
-
   return useMutation<
-    ISignupResponse,
+    IAuthResponse,
     AxiosError<{ error: string; message: string }>,
     TSignUp
   >({
     mutationFn: SignUp,
-    onSuccess: (data: ISignupResponse) => {
+    onSuccess: (data: IAuthResponse) => {
+      setUser({
+        img: data.data.img,
+        id: data.data.id,
+        token: data.data.token,
+        username: data.data.username,
+      });
       toast({
-        title: data.successMessage,
-        description: data.data.message,
+        title: data.successCode,
+        description: data.successMessage,
       });
       Cookies.set("userToken", data.data.token, { expires: 1 });
     },
@@ -70,37 +75,43 @@ export const useSignUp = (): UseMutationResult<
   });
 };
 
-const SignIn = async (userData: TSignIn): Promise<ISignupResponse> => {
-  console.log(userData);
-  return {
-    successCode: "Hello",
-    data: {
-      message: "Hello",
-      token: "Hello",
-      user: {},
-    },
-    successMessage: "Hello",
-  };
+const SignIn = async (userData: TSignIn): Promise<IAuthResponse> => {
+  const response: AxiosResponse<IAuthResponse> =
+    await axios.post<IAuthResponse>(
+      `${import.meta.env.VITE_END_POINT}/v1/auth/login`,
+      userData
+    );
+  return response.data;
 };
 
 export const useSignIn = (): UseMutationResult<
-  ISignupResponse,
+  IAuthResponse,
   AxiosError<{ error: string; message: string }>,
   TSignIn
 > => {
+  const { setUser } = useStore((state) => ({
+    setUser: state.setUser,
+  }));
   const { toast } = useToast();
 
   return useMutation<
-    ISignupResponse,
+    IAuthResponse,
     AxiosError<{ error: string; message: string }>,
     TSignIn
   >({
     mutationFn: SignIn,
-    onSuccess: (data: ISignupResponse) => {
-      toast({
-        title: data.successMessage,
-        description: data.data.message,
+    onSuccess: (data: IAuthResponse) => {
+      setUser({
+        img: data.data.img,
+        id: data.data.id,
+        token: data.data.token,
+        username: data.data.username,
       });
+      toast({
+        title: data.successCode,
+        description: data.successMessage,
+      });
+      Cookies.set("userToken", data.data.token, { expires: 1 });
     },
     onError: (error: AxiosError<{ error: string; message: string }>) => {
       const errorResponse = error.response?.data;
@@ -121,22 +132,30 @@ export const useSignIn = (): UseMutationResult<
 
 const verifyEmail = async (
   token: string | undefined
-): Promise<IVerifyEmailResponse> => {
-  const response = await axios.get(
+): Promise<IAuthResponse> => {
+  const response = await axios.get<IAuthResponse>(
     `${import.meta.env.VITE_END_POINT}/v1/auth/verifyEmail`,
     {
       params: { token },
     }
   );
+  console.log(response.data);
   return response.data;
 };
 
 export const useVerifyEmail = (
   token: string | undefined
-): UseQueryResult<IVerifyEmailResponse> => {
+): UseQueryResult<IAuthResponse> => {
+  // const { toast } = useToast();
+  // toast({
+  //   title: "Verifiying",
+  //   description: "Please wait, While we are verifying your email",
+  // });
   return useQuery({
     queryKey: ["verifyEmail", token],
     queryFn: () => verifyEmail(token),
     staleTime: Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 };

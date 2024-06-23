@@ -64,4 +64,36 @@ const StoryCard = ({ title, id, category }: TProps) => {
   );
 };
 
+export const StoryCardSkeleton = () => {
+  return (
+    <div className="min-w-72 max-w-[400px] w-full rounded-lg p-2 transition-all flex gap-2 flex-col animate-pulse">
+      <div className="rounded-lg min-w-72 aspect-video bg-gray-300 dark:bg-gray-700"></div>
+      <div className="flex items-start gap-3 h-[72px]">
+        <div className="rounded-full bg-gray-300 dark:bg-gray-700 w-10 h-10 mt-1"></div>
+        <div>
+          <div
+            className="bg-gray-300 dark:bg-gray-700 rounded h-6 mb-2"
+            style={{ width: "190px" }}
+          ></div>
+          <div className="flex flex-row items-center gap-1 text-sm opacity-80">
+            <span className="bg-gray-300 dark:bg-gray-700 rounded w-16 h-4"></span>
+            &#x2022;
+            <span className="bg-gray-300 dark:bg-gray-700 rounded w-8 h-4"></span>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-3">
+        <div className="flex gap-2">
+          <span className="rounded-sm py-1 px-2 bg-gray-300 dark:bg-gray-700 opacity-70 w-20 h-6"></span>
+        </div>
+        <div className="px-2 flex flex-row items-center gap-2 opacity-80">
+          <span className="bg-gray-300 dark:bg-gray-700 rounded w-12 h-4"></span>
+          &#x2022;
+          <span className="bg-gray-300 dark:bg-gray-700 rounded w-12 h-4"></span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default StoryCard;

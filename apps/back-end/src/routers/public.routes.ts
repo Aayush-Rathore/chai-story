@@ -7,5 +7,8 @@ const publicControllers = new PublicControllers();
 
 router.route("/home").get(asyncHandler(publicControllers.homePageData));
 router.route("/story/:storyId").get(asyncHandler(publicControllers.fetchStory));
+router
+  .route("/profile/:username")
+  .get(asyncHandler(publicControllers.userProfile));
 
 export default router;

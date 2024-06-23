@@ -13,6 +13,8 @@ declare global {
       REDIS_PORT: number;
       REDIS_PASS: string;
       REDIS_USERNAME: string;
+
+      CLIENT: string;
     }
   }
 }

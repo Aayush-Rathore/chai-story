@@ -6,12 +6,18 @@ import {
   NavigationMenuList,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
-import { ModeToggle } from "@/components/ui/theme-toggler";
 import Logo from "@/assets/Logo.png";
 import { Menu } from "lucide-react";
-import { NavbarLinks } from "@/constants/Navbar";
+import { NavbarLinks } from "@/constantsVariables/fixedVariables";
+import useStore from "@/store/zustand.store";
+import DialogBox from "./Dialog";
+import Dropdown from "./Dropdown";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const Navbar = () => {
+  const { user } = useStore((state) => ({
+    user: state.user,
+  }));
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 justify-between sticky top-0 bg-background shadow-xl z-10 mb-3">
       <Sheet>
@@ -60,7 +66,20 @@ const Navbar = () => {
           })}
         </NavigationMenuList>
       </NavigationMenu>
-      <ModeToggle />
+
+      {!user ? (
+        <DialogBox>
+          <Button>Login</Button>
+        </DialogBox>
+      ) : (
+        <Dropdown username={user.username}>
+          <Avatar>
+            <AvatarImage src={user.img} alt="User Avatar" />
+            <AvatarFallback>profile</AvatarFallback>
+          </Avatar>
+        </Dropdown>
+      )}
+      {/* <ModeToggle /> */}
     </header>
   );
 };

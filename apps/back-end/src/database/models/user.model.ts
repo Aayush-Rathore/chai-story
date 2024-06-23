@@ -6,6 +6,8 @@ export interface IUser extends Document {
   username: string;
   email: string;
   password?: string;
+  isVerified: boolean;
+  img: string;
   matchPassword(password: string): Promise<boolean>;
   generateAccessToken(): Promise<string>;
 }
@@ -27,11 +29,18 @@ const UserSchema = new Schema(
     password: {
       type: String,
       required: true,
-      selected: false,
+      select: false,
+    },
+
+    isVerified: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
 
     img: {
       type: String,
+      default: "https://s3.tebi.io/chai-story/defaultImg.jpg",
     },
   },
   { timestamps: true }
@@ -40,7 +49,6 @@ const UserSchema = new Schema(
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 9);
-
   next();
 });
 

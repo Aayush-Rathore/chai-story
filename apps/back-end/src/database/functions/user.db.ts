@@ -37,6 +37,59 @@ class UsersDB {
       );
     }
   }
+
+  public async userProfile(username: string) {
+    const pipeline = [
+      {
+        $match: { username: username },
+      },
+      {
+        $lookup: {
+          from: "follows", // Name of the follows collection in your database
+          localField: "_id",
+          foreignField: "to",
+          as: "followers",
+        },
+      },
+      {
+        $lookup: {
+          from: "follows", // Name of the follows collection in your database
+          localField: "_id",
+          foreignField: "by",
+          as: "following",
+        },
+      },
+      {
+        $addFields: {
+          followerCount: { $size: "$followers" },
+          followingCount: { $size: "$following" },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          username: 1,
+          email: 1,
+          isVerified: 1,
+          img: 1,
+          followerCount: 1,
+          followingCount: 1,
+        },
+      },
+    ];
+
+    const usersDetails = await Users.aggregate(pipeline);
+    return usersDetails;
+  }
+
+  public async updateUser(id: string, update: Partial<IUser>) {
+    const updatedUser = await Users.findByIdAndUpdate(
+      id,
+      { $set: update },
+      { new: true, runValidators: true, context: "query" }
+    );
+    return updatedUser;
+  }
 }
 
 export default new UsersDB();

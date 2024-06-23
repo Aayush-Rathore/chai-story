@@ -1,20 +1,31 @@
 import { create } from "zustand";
-import Cookies from "js-cookie";
+import { persist } from "zustand/middleware";
 
-type State = {
-  userAuth: string | undefined;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setUser: (user: any) => void;
-  // removeAllBears: () => void;
-  // updateBears: (newBears: number) => void;
-};
+interface User {
+  id: string;
+  img: string;
+  token: string;
+  username: string;
+}
 
-const useStore = create<State>((set) => ({
-  userAuth: Cookies.get("userToken"),
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setUser: (user: any) => set(() => ({ userAuth: user })),
-  // removeAllBears: () => set({ bears: 0 }),
-  // updateBears: (newBears) => set({ bears: newBears }),
-}));
+interface UserState {
+  user: User | null;
+  setUser: (user: User | null) => void;
+  clearUser: () => void;
+}
+
+const useStore = create<UserState>()(
+  persist(
+    (set) => ({
+      user: null,
+      setUser: (user) => set({ user }),
+      clearUser: () => set({ user: null }),
+    }),
+    {
+      name: "user-storage",
+      getStorage: () => localStorage,
+    }
+  )
+);
 
 export default useStore;

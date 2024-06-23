@@ -5,6 +5,7 @@ import hiteshSir from "@/assets/hiteshSir.png";
 import { FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
+import Footer from "@/components/constants/Footer";
 
 const Home = () => {
   return (
@@ -67,7 +68,7 @@ const Home = () => {
         </div>
       </section>
       <Separator className="my-3" />
-      <section className="flex items-center flex-col">
+      <section className="flex items-center flex-col mb-4">
         <h1 className="philosopher-bold text-4xl mb-10 text-center">
           Support Us
         </h1>
@@ -86,6 +87,7 @@ const Home = () => {
           <Button type="submit">Subscribe</Button>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };
