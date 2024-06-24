@@ -3,7 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import StoryCard, { StoryCardSkeleton } from "@/components/constants/StoryCard";
-import { useStories } from "@/api/getStories";
+import { useStories } from "@/api/storyFunction";
 import Alert from "@/components/constants/Progress";
 import { Categories } from "@/constantsVariables/fixedVariables";
 

@@ -4,6 +4,9 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import PublicRoutes from "./routers/public.routes";
 import AuthRouters from "./routers/auth.routes";
+import PostRouters from "./routers/post.routes";
+import { verifyUser } from "./middleware/authentication.middleware";
+import { asyncHandler } from "./utilities/asyncHandler.utility";
 
 class ExpressServer {
   private app: Application;
@@ -23,8 +26,9 @@ class ExpressServer {
   }
 
   private useRoutes() {
-    this.app.use("/v1/public", PublicRoutes);
+    this.app.use("/v1/public", asyncHandler(verifyUser), PublicRoutes);
     this.app.use("/v1/auth", AuthRouters);
+    this.app.use("/v1/post", asyncHandler(verifyUser), PostRouters);
   }
 
   private useMiddleware() {
@@ -37,13 +41,9 @@ class ExpressServer {
       cors({
         origin: process.env.CORS_ORIGIN,
         credentials: true,
-        exposedHeaders: "Set-Cookie",
         methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
-        allowedHeaders: [
-          "Access-Control-Allow-Origin",
-          "Content-Type",
-          "Authorization",
-        ],
+        allowedHeaders: ["Content-Type", "Authorization", "Cookies", "Cookie"],
+        exposedHeaders: ["Set-Cookie"],
       })
     );
 

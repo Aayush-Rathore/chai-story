@@ -6,7 +6,8 @@ import {
   ResponseMessages,
   StatusMessages,
 } from "../constants/messages.constants";
-import { TLogin, TSignUp, TVerifyEmail } from "../types/common.types";
+import { TLogin, TPostId, TSignUp, TVerifyEmail } from "../types/common.types";
+import postValidations from "../validations/post.validations";
 
 class Validate {
   private validate<T>(params: T, parseFunction: (params: T) => any): void {
@@ -41,6 +42,13 @@ class Validate {
     this.validate(
       params,
       authValidations.VerifyEmail.parse.bind(authValidations.VerifyEmail)
+    );
+  }
+
+  public LikeUnlike(params: TPostId) {
+    this.validate(
+      params,
+      postValidations.PostId.parse.bind(postValidations.PostId)
     );
   }
 }

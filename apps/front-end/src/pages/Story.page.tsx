@@ -9,7 +9,7 @@ import defaultPosterDark from "@/assets/defaultPosterDark.svg";
 import StoryCard from "@/components/constants/StoryCard";
 import useStore from "@/store/zustand.store";
 import DialogBox from "@/components/constants/Dialog";
-import { useStoryWithId } from "@/api/getStories";
+import { useLike, useStoryWithId, useUnlike } from "@/api/storyFunction";
 import NotFound from "@/components/constants/NotFound";
 
 const Story = () => {
@@ -24,24 +24,27 @@ const Story = () => {
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data: storyData, isLoading, error } = useStoryWithId(storyId);
-  const handleLikeBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (user) {
-      console.log("Go ahead", e.button);
-    } else {
-      console.log("verify first");
-    }
-  };
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { mutate: likeStory, error: likeError, reset, isPending } = useLike();
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const unLike = useUnlike();
+  const data = storyData?.data[0];
 
   if (isLoading) {
     return <SkeletonStory />;
   }
 
-  if (error) {
+  if (error || !data) {
     return (
       <div className="size-full flex justify-center items-center">
         <NotFound />
       </div>
     );
+  }
+
+  if (likeError) {
+    data.liked = false;
+    data.likes--;
   }
 
   return (
@@ -68,9 +71,7 @@ const Story = () => {
               </AvatarFallback>
             </Avatar>
             <div>
-              <div className="break-words overflow-hidden">
-                {storyData?.data.title}
-              </div>
+              <div className="break-words overflow-hidden">{data.title}</div>
               <div className="flex flex-row items-center gap-1 text-sm opacity-80">
                 <span>{storyData?.authorDetails.username}</span>&#x2022;
                 <span className="text-sm">3h</span>
@@ -80,22 +81,42 @@ const Story = () => {
           <div className="flex flex-col gap-3">
             <div className="flex gap-2">
               <span className="rounded-sm py-1 px-2 font-medium text-sm bg-secondary opacity-70">
-                {storyData?.data.category}
+                {data.category}
               </span>
             </div>
             <div className="px-2 flex flex-row items-center gap-2 opacity-80">
-              <button>{storyData?.data.likes} likes</button>
+              <span>{data.likes} likes</span>
               &#x2022;
             </div>
             <div className="flex gap-5">
               {user ? (
-                <Button className="flex gap-3" onClick={handleLikeBtn}>
-                  Like <FaHeart size={17} />
+                <Button
+                  className={`flex gap-3 ${data.liked ? "bg-primary" : "bg-secondary"}`}
+                  onClick={() => {
+                    if (data.liked) {
+                      data.liked = false;
+                      data.likes--;
+                      unLike.mutate({ postId: data._id });
+                    } else {
+                      if (isPending) {
+                        data.liked = false;
+                        data.likes--;
+                        reset();
+                      } else {
+                        data.liked = true;
+                        data.likes++;
+                        likeStory({ postId: storyId });
+                      }
+                    }
+                  }}
+                >
+                  {data.liked && "Liked"}
+                  <FaHeart size={17} />
                 </Button>
               ) : (
                 <DialogBox>
-                  <Button className="flex gap-3">
-                    Like <FaHeart size={17} />
+                  <Button className="flex gap-3 bg-secondary">
+                    <FaHeart size={17} />
                   </Button>
                 </DialogBox>
               )}
@@ -106,7 +127,7 @@ const Story = () => {
       <div className="flex gap-5">
         <MDXProvider>
           <div className="p-4 md:w-3/5 lg:w-[70%]">
-            <h1 className="text-3xl font-bold mb-4">{storyData?.data.title}</h1>
+            <h1 className="text-3xl font-bold mb-4">{data.title}</h1>
             <StoryFile />
           </div>
         </MDXProvider>

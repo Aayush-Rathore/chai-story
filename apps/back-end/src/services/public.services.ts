@@ -11,8 +11,8 @@ class PublicServices {
     return stories;
   }
 
-  public async FetchStory(storyId: string) {
-    const storyData = await storiesDb.fetchStoryData(storyId);
+  public async FetchStory(storyId: string, userId?: string) {
+    const storyData = await storiesDb.fetchStoryData(storyId, userId);
     return storyData;
   }
 

@@ -1,6 +1,7 @@
 import zod from "zod";
 
 class BaseValidations {
+  private objectIdRegex = /^[a-fA-F0-9]{24}$/;
   protected username = zod
     .string()
     .toLowerCase()
@@ -32,6 +33,10 @@ class BaseValidations {
       message: "Invalid JWT token format",
     }
   );
+
+  protected id = zod.string().refine((val) => this.objectIdRegex.test(val), {
+    message: "Invalid id",
+  });
 }
 
 export default BaseValidations;

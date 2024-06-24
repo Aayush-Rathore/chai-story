@@ -14,7 +14,8 @@ class PublicControllers {
 
   public async fetchStory(req: Request, res: Response) {
     const storyId = req.params.storyId;
-    const storyData = await publicServices.FetchStory(storyId);
+    const userId = req.user.id;
+    const storyData = await publicServices.FetchStory(storyId, userId);
     res.status(200).json({
       data: storyData,
       authorDetails: { username: "Aayush", profile: null },

@@ -1,3 +1,6 @@
+import { TJsonPayload } from "./src/types/common.types";
+import { JwtPayload } from "jsonwebtoken";
+
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
@@ -15,6 +18,12 @@ declare global {
       REDIS_USERNAME: string;
 
       CLIENT: string;
+    }
+  }
+
+  namespace Express {
+    interface Request {
+      user?: any;
     }
   }
 }

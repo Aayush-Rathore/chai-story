@@ -18,7 +18,14 @@ const Verification = () => {
           type="pending"
         />
       ) : error ? (
-        <Alert title={error.name} description={error.message} type="alert" />
+        <>
+          <Alert
+            title={"Url Expired"}
+            description={"Please request for another url and try again later!."}
+            type="alert"
+          />
+          <Button onClick={() => navigate("/")}>Go to Home Page</Button>
+        </>
       ) : (
         verificationData && (
           <>
@@ -27,7 +34,9 @@ const Verification = () => {
               description={verificationData.successMessage}
               type="success"
             />
-            <Button onClick={() => navigate("/")}>Enjoy Exploring</Button>
+            <Button onClick={() => navigate("/stories")}>
+              Enjoy Exploring
+            </Button>
           </>
         )
       )}
