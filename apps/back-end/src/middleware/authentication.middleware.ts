@@ -10,14 +10,17 @@ export const verifyUser = async (
 ) => {
   const originalUrl = req.originalUrl;
   const { accessToken } = req.cookies as TJsonPayload;
-  if (originalUrl.includes("/v1/public") && !accessToken) return next();
-  if (!accessToken) {
-    throw new ApiError(
-      401,
-      "Unauthorized",
-      "You need to login before using this functionality."
-    );
+  if (originalUrl.includes("/v1/public") && !accessToken) {
+    next();
+  } else {
+    if (!accessToken) {
+      throw new ApiError(
+        401,
+        "Unauthorized",
+        "You need to login before using this functionality."
+      );
+    }
+    req.user = VeirfyToken(accessToken);
+    next();
   }
-  req.user = VeirfyToken(accessToken);
-  next();
 };

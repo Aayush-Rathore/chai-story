@@ -5,8 +5,8 @@ import ApiResponse from "../utilities/apiResponse.utility";
 
 class PostControllers {
   public async LikePost(req: Request, res: Response) {
-    validate.LikeUnlike(req.body);
-    const likedPost = await postServices.Like(req.body);
+    validate.ObjectId({ objectId: req.body.postId });
+    const likedPost = await postServices.Like({ objectId: req.body.postId });
     await postServices.LikeUnlikeDoc({
       userId: req.user.id,
       postId: likedPost.id,
@@ -21,8 +21,10 @@ class PostControllers {
   }
 
   public async UnlikePost(req: Request, res: Response) {
-    validate.LikeUnlike(req.body);
-    const unlikedPost = await postServices.Unlike(req.body);
+    validate.ObjectId({ objectId: req.body.postId });
+    const unlikedPost = await postServices.Unlike({
+      objectId: req.body.postId,
+    });
     await postServices.LikeUnlikeDoc({
       userId: req.user.id,
       postId: unlikedPost.id,

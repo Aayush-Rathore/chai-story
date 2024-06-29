@@ -13,9 +13,7 @@ import { useLike, useStoryWithId, useUnlike } from "@/api/storyFunction";
 import NotFound from "@/components/constants/NotFound";
 
 const Story = () => {
-  const { user } = useStore((state) => ({
-    user: state.user,
-  }));
+  const user = useStore((e) => e.user);
   const { id: storyId } = useParams<{ id: string }>();
 
   if (!storyId) {

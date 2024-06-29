@@ -18,6 +18,11 @@ class FormValidation extends BaseValidations {
     }),
     password: this.password,
   });
+
+  public publisStory = zod.object({
+    storyTitle: this.title,
+    storyCategories: this.categories,
+  });
 }
 
 export default new FormValidation();

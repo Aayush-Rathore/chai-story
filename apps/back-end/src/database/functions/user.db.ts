@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { TSignUp } from "../../types/common.types";
 import ApiError from "../../utilities/apiError.utility";
 import Users, { IUser } from "../models/user.model";
@@ -6,12 +7,14 @@ class UsersDB {
   public async getUser({
     email,
     username,
+    _id,
   }: {
     email?: string;
     username?: string;
+    _id?: string;
   }): Promise<IUser | null> {
     const userDetails = await Users.findOne({
-      $or: [{ username }, { email }],
+      $or: [{ username }, { email }, { _id }],
     }).select("+password");
     return userDetails;
   }
@@ -38,14 +41,14 @@ class UsersDB {
     }
   }
 
-  public async userProfile(username: string) {
-    const pipeline = [
+  async userProfile(username: string, userId?: string) {
+    const pipeline: any[] = [
       {
-        $match: { username: username },
+        $match: { username },
       },
       {
         $lookup: {
-          from: "follows", // Name of the follows collection in your database
+          from: "follows",
           localField: "_id",
           foreignField: "to",
           as: "followers",
@@ -53,7 +56,7 @@ class UsersDB {
       },
       {
         $lookup: {
-          from: "follows", // Name of the follows collection in your database
+          from: "follows",
           localField: "_id",
           foreignField: "by",
           as: "following",
@@ -61,24 +64,64 @@ class UsersDB {
       },
       {
         $addFields: {
-          followerCount: { $size: "$followers" },
+          followersCount: { $size: "$followers" },
           followingCount: { $size: "$following" },
         },
       },
       {
         $project: {
-          _id: 1,
           username: 1,
+          _id: 1,
           email: 1,
-          isVerified: 1,
           img: 1,
-          followerCount: 1,
+          isVerified: 1,
+          followersCount: 1,
           followingCount: 1,
         },
       },
     ];
 
-    const usersDetails = await Users.aggregate(pipeline);
+    if (userId) {
+      const userIdObj = new mongoose.Types.ObjectId(userId);
+      pipeline.push({
+        $lookup: {
+          from: "follows",
+          let: { userId: "$_id", currentUserId: userIdObj },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$to", "$$userId"] },
+                    { $eq: ["$by", "$$currentUserId"] },
+                  ],
+                },
+              },
+            },
+            { $limit: 1 },
+          ],
+          as: "followingCheck",
+        },
+      });
+      pipeline.push({
+        $addFields: {
+          isFollowing: {
+            $cond: {
+              if: { $gt: [{ $size: "$followingCheck" }, 0] },
+              then: true,
+              else: false,
+            },
+          },
+        },
+      });
+      pipeline.push({
+        $project: {
+          followingCheck: 0,
+        },
+      });
+    }
+
+    const usersDetails = await Users.aggregate<IUser>(pipeline);
     return usersDetails;
   }
 

@@ -13,6 +13,7 @@ export interface IStory extends Document {
   likes: number;
   category: StoryCategory;
   owner: mongoose.Types.ObjectId;
+  status: "draft" | "public" | "private";
 }
 
 const StoriesSchema = new Schema(
@@ -46,6 +47,12 @@ const StoriesSchema = new Schema(
     likes: {
       type: Number,
       default: 0,
+    },
+
+    status: {
+      type: String,
+      default: "draft",
+      required: true,
     },
   },
   { timestamps: true }

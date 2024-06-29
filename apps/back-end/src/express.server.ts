@@ -5,12 +5,19 @@ import cookieParser from "cookie-parser";
 import PublicRoutes from "./routers/public.routes";
 import AuthRouters from "./routers/auth.routes";
 import PostRouters from "./routers/post.routes";
+import UserRouters from "./routers/user.routes";
+import FileRouters from "./routers/files.routes";
 import { verifyUser } from "./middleware/authentication.middleware";
 import { asyncHandler } from "./utilities/asyncHandler.utility";
+import session from "express-session";
+import RedisStore from "connect-redis";
+import redis from "redis";
 
 class ExpressServer {
   private app: Application;
   private limiter: any;
+  // private redisClient: redis.RedisClientType;
+  private redisStore: any;
 
   constructor() {
     this.app = express();
@@ -23,12 +30,23 @@ class ExpressServer {
     });
     this.useMiddleware();
     this.useRoutes();
+
+    // this.redisClient = redis.createClient({
+    //   url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASS}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+    // });
+
+    // const RedisStoreInstance = new RedisStore({
+    //   client: this.redisClient,
+    //   prefix: "chai-story",
+    // });
   }
 
   private useRoutes() {
     this.app.use("/v1/public", asyncHandler(verifyUser), PublicRoutes);
     this.app.use("/v1/auth", AuthRouters);
     this.app.use("/v1/post", asyncHandler(verifyUser), PostRouters);
+    this.app.use("/v1/user", asyncHandler(verifyUser), UserRouters);
+    this.app.use("/v1/files", asyncHandler(verifyUser), FileRouters);
   }
 
   private useMiddleware() {
@@ -61,6 +79,18 @@ class ExpressServer {
     );
 
     this.app.use(cookieParser());
+
+    this.app.use(
+      session({
+        secret: process.env.REDIS_SECRET_KEY,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+          maxAge: 1000 * 60 * 60 * 24,
+          secure: false,
+        },
+      })
+    );
   }
 
   public startServer() {

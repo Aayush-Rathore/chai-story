@@ -12,7 +12,7 @@ const RouteProvider = ({ children }: TProps) => {
 };
 
 const ThemeProvider = ({ children }: TProps) => {
-  return <Theme>{children}</Theme>;
+  return <Theme defaultTheme="dark">{children}</Theme>;
 };
 
 const ReactQueryProvider = ({ children }: TProps) => {

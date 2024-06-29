@@ -1,0 +1,133 @@
+import {
+  MDXEditor,
+  UndoRedo,
+  BoldItalicUnderlineToggles,
+  toolbarPlugin,
+  headingsPlugin,
+  ListsToggle,
+  listsPlugin,
+  quotePlugin,
+  markdownShortcutPlugin,
+  directivesPlugin,
+  AdmonitionDirectiveDescriptor,
+  InsertAdmonition,
+} from "@mdxeditor/editor";
+import "@mdxeditor/editor/style.css";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState, useEffect, useRef } from "react";
+import { useAutoSave } from "@/api/storyFunction";
+
+const StoryEditor: React.FC = () => {
+  const [story, setStory] = useState<string>("");
+  const [isDirty, setDirty] = useState<boolean>(false);
+  const autoSave = useAutoSave();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleOnChange = (content: string) => {
+    setStory(content);
+    setDirty(true);
+  };
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      if (isDirty) {
+        console.log("Network call");
+        autoSave.mutate({ storyContent: story });
+        setDirty(false);
+      }
+    }, 10000);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [story, isDirty, autoSave]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  });
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="title">Story Title</Label>
+        <Input type="text" id="title" placeholder="Story Title" required />
+      </div>
+      <Select>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select Category" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Categories</SelectLabel>
+            <SelectItem value="adventure">Adventure</SelectItem>
+            <SelectItem value="romance">Romance</SelectItem>
+            <SelectItem value="mystery">Mystery</SelectItem>
+            <SelectItem value="scienceFiction">Science Fiction</SelectItem>
+            <SelectItem value="fantasy">Fantasy</SelectItem>
+            <SelectItem value="horror">Horror</SelectItem>
+            <SelectItem value="historical Fiction">
+              Historical Fiction
+            </SelectItem>
+            <SelectItem value="drama">Drama</SelectItem>
+            <SelectItem value="comedy">Comedy</SelectItem>
+            <SelectItem value="thriller">Thriller</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      <div>
+        <MDXEditor
+          markdown={story}
+          placeholder="Start writing your story..."
+          onChange={handleOnChange}
+          toMarkdownOptions={{
+            incrementListMarker: true,
+            listItemIndent: "mixed",
+          }}
+          plugins={[
+            toolbarPlugin({
+              toolbarContents: () => (
+                <>
+                  <UndoRedo />
+                  <BoldItalicUnderlineToggles />
+                  <ListsToggle options={["bullet", "number"]} />
+                  <InsertAdmonition />
+                </>
+              ),
+            }),
+            headingsPlugin({ allowedHeadingLevels: [1, 2, 3, 4, 5, 6] }),
+            listsPlugin(),
+            quotePlugin(),
+            markdownShortcutPlugin(),
+            directivesPlugin({
+              directiveDescriptors: [AdmonitionDirectiveDescriptor],
+            }),
+          ]}
+          contentEditableClassName="bg-white text-black rounded"
+        />
+      </div>
+    </div>
+  );
+};
+
+export default StoryEditor;

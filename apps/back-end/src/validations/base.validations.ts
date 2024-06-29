@@ -34,9 +34,13 @@ class BaseValidations {
     }
   );
 
-  protected id = zod.string().refine((val) => this.objectIdRegex.test(val), {
-    message: "Invalid id",
-  });
+  protected objectId = zod
+    .string()
+    .refine((val) => this.objectIdRegex.test(val), {
+      message: "Invalid id",
+    });
+
+  protected mdxContent = zod.string();
 }
 
 export default BaseValidations;

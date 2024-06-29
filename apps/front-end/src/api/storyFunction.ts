@@ -153,3 +153,42 @@ export const useUnlike = (): UseMutationResult<
     },
   });
 };
+
+const autoSave = async ({
+  storyContent,
+}: {
+  storyContent: string;
+}): Promise<IPostResponse> => {
+  const response: AxiosResponse<IPostResponse> =
+    await apiInstance.put<IPostResponse>(`/v1/files/autosave`, {
+      storyContent,
+    });
+  return response.data;
+};
+
+export const useAutoSave = (): UseMutationResult<
+  IPostResponse,
+  AxiosError<{ error: string; message: string }>,
+  { storyContent: string }
+> => {
+  const { toast } = useToast();
+  return useMutation<
+    IPostResponse,
+    AxiosError<{ error: string; message: string }>,
+    { storyContent: string }
+  >({
+    mutationFn: autoSave,
+    onSuccess: (data: IPostResponse) => {
+      toast({
+        title: data.successCode,
+        description: data.successMessage,
+      });
+    },
+    onError: (error: AxiosError<{ error: string; message: string }>) => {
+      toast({
+        title: error.name,
+        description: error.message,
+      });
+    },
+  });
+};

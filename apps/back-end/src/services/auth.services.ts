@@ -111,6 +111,27 @@ class AuthServices {
       username: updatedUser.username,
     };
   }
+
+  public async VerifyUser(_id: string) {
+    const userInfo = await userDb.getUser({ _id });
+    if (!userInfo) {
+      throw new ApiError(
+        401,
+        "User not found",
+        `Something went wrong, Your token might be invalid`,
+        {
+          message: "Please signin again!",
+        }
+      );
+    }
+    const token = await userInfo?.generateAccessToken();
+    return {
+      token,
+      img: userInfo.img,
+      id: userInfo.id,
+      username: userInfo.username,
+    };
+  }
 }
 
 export default new AuthServices();

@@ -34,9 +34,7 @@ export const useSignUp = (): UseMutationResult<
   AxiosError<{ error: string; message: string }>,
   TSignUp
 > => {
-  const { setUser } = useStore((state) => ({
-    setUser: state.setUser,
-  }));
+  const setUser = useStore((e) => e.setUser);
   const { toast } = useToast();
   return useMutation<
     IAuthResponse,
@@ -86,9 +84,7 @@ export const useSignIn = (): UseMutationResult<
   AxiosError<{ error: string; message: string }>,
   TSignIn
 > => {
-  const { setUser } = useStore((state) => ({
-    setUser: state.setUser,
-  }));
+  const setUser = useStore((e) => e.setUser);
   const { toast } = useToast();
 
   return useMutation<
@@ -147,5 +143,19 @@ export const useVerifyEmail = (
     staleTime: Infinity,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+  });
+};
+
+const VerifyUser = async (): Promise<IAuthResponse> => {
+  const response = await apiInstance.get<IAuthResponse>("v1/auth/verifyUser");
+  return response.data;
+};
+
+export const useVerification = (): UseQueryResult<IAuthResponse | null> => {
+  return useQuery({
+    queryKey: ["verification"],
+    queryFn: () => VerifyUser(),
+    staleTime: Infinity,
+    retry: false,
   });
 };

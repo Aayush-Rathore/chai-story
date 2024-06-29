@@ -1,7 +1,7 @@
 import zod from "zod";
 import authValidations from "../validations/auth.validations";
 import { JwtPayload } from "jsonwebtoken";
-import postValidations from "../validations/post.validations";
+import commonValidations from "../validations/common.validations";
 
 export type TSignUp = zod.infer<typeof authValidations.SignUp>;
 export type TLogin = zod.infer<typeof authValidations.Login>;
@@ -14,4 +14,5 @@ export type TJsonPayload = JwtPayload & {
   exp: number;
 };
 
-export type TPostId = zod.infer<typeof postValidations.PostId>;
+export type TObjectId = zod.infer<typeof commonValidations.id>;
+export type TStoryContent = zod.infer<typeof commonValidations.mdx>;

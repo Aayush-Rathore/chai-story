@@ -16,8 +16,8 @@ class PublicServices {
     return storyData;
   }
 
-  public async userProfile(username: string) {
-    const profile = await userDb.userProfile(username);
+  public async userProfile(username: string, userId?: string) {
+    const profile = await userDb.userProfile(username, userId);
     return profile;
   }
 }

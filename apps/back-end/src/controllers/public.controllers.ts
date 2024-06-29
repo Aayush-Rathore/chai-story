@@ -13,18 +13,21 @@ class PublicControllers {
   }
 
   public async fetchStory(req: Request, res: Response) {
+    let userId: string = "";
+    if (req.user) userId = req.user.id;
     const storyId = req.params.storyId;
-    const userId = req.user.id;
     const storyData = await publicServices.FetchStory(storyId, userId);
     res.status(200).json({
       data: storyData,
-      authorDetails: { username: "Aayush", profile: null },
+      authorDetails: { username: "aayush", profile: null },
     });
   }
 
   public async userProfile(req: Request, res: Response) {
+    let userId: string = "";
+    if (req.user) userId = req.user.id;
     const username = req.params.username;
-    const profile = await publicServices.userProfile(username);
+    const profile = await publicServices.userProfile(username, userId);
     new ApiResponse(
       201,
       "SUCCESS!",

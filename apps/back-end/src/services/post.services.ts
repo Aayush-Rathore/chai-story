@@ -1,10 +1,10 @@
-import { TPostId } from "../types/common.types";
+import { TObjectId } from "../types/common.types";
 import storiesDb from "../database/functions/stories.db";
 import ApiError from "../utilities/apiError.utility";
 
 class PostServices {
-  public async Like(params: TPostId) {
-    const likedPost = await storiesDb.likeStory(params.postId);
+  public async Like(params: TObjectId) {
+    const likedPost = await storiesDb.likeStory(params.objectId);
     if (!likedPost) {
       throw new ApiError(404, "NOT_FOUND", "Post not found");
     }
@@ -16,8 +16,8 @@ class PostServices {
     return postLikeDoc;
   }
 
-  public async Unlike(params: TPostId) {
-    const unlikedPost = await storiesDb.unlikeStory(params.postId);
+  public async Unlike(params: TObjectId) {
+    const unlikedPost = await storiesDb.unlikeStory(params.objectId);
     if (!unlikedPost) {
       throw new ApiError(404, "NOT_FOUND", "Post not found");
     }

@@ -18,6 +18,16 @@ declare global {
       REDIS_USERNAME: string;
 
       CLIENT: string;
+
+      AWS_S3_ACCEESS_KEY: string;
+      AWS_S3_SECRET_KEY: string;
+      AWS_S3_END_POINT: string;
+      AWS_S3_REGION: string;
+      AWS_S3_BUCKET_NAME: string;
+
+      SOCKET_SERVER_PORT: number;
+
+      REDIS_SECRET_KEY: string;
     }
   }
 

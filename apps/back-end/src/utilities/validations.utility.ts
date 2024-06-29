@@ -6,8 +6,14 @@ import {
   ResponseMessages,
   StatusMessages,
 } from "../constants/messages.constants";
-import { TLogin, TPostId, TSignUp, TVerifyEmail } from "../types/common.types";
-import postValidations from "../validations/post.validations";
+import {
+  TLogin,
+  TSignUp,
+  TVerifyEmail,
+  TObjectId,
+  TStoryContent,
+} from "../types/common.types";
+import commonValidations from "../validations/common.validations";
 
 class Validate {
   private validate<T>(params: T, parseFunction: (params: T) => any): void {
@@ -45,10 +51,17 @@ class Validate {
     );
   }
 
-  public LikeUnlike(params: TPostId) {
+  public ObjectId(params: TObjectId) {
     this.validate(
       params,
-      postValidations.PostId.parse.bind(postValidations.PostId)
+      commonValidations.id.parse.bind(commonValidations.id)
+    );
+  }
+
+  public StoryContent(params: TStoryContent) {
+    this.validate(
+      params,
+      commonValidations.mdx.parse.bind(commonValidations.mdx)
     );
   }
 }

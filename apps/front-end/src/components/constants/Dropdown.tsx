@@ -17,7 +17,7 @@ export default function Dropdown({
   username: string;
 }) {
   const navigate = useNavigate();
-  const { clearUser } = useStore((e) => e);
+  const clearUser = useStore((e) => e.clearUser);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
@@ -31,7 +31,11 @@ export default function Dropdown({
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => clearUser()}>
+          <DropdownMenuItem
+            onClick={() => {
+              clearUser();
+            }}
+          >
             <LogOut className="mr-2 h-4 w-4" />
             <span>Logout</span>
           </DropdownMenuItem>

@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -60,10 +61,9 @@ function DialogBox({ children }: { children: React.ReactNode }) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-[450px]">
         <DialogHeader>
+          <DialogTitle>Welcome to Chai-Story &#x1FAD7;</DialogTitle>
           <DialogDescription className="font-medium text-secondary-foreground">
-            Welcome to Chai-Story{" "}
-            <strong className="text-2xl ml-2">&#x1FAD7;</strong>
-            <br /> Aap ki khani chai ke sath!{" "}
+            Aap ki khani chai ke sath!{" "}
             <strong className="text-2xl ml-2">&#x1F643;</strong>
           </DialogDescription>
         </DialogHeader>
