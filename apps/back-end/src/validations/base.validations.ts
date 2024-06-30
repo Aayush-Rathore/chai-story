@@ -41,6 +41,11 @@ class BaseValidations {
     });
 
   protected mdxContent = zod.string();
+
+  protected storyTitle = zod.string().min(10).max(50);
+  protected storyCategories = zod.string();
+  protected storyContent = zod.string();
+  protected fileUrl = zod.string();
 }
 
 export default BaseValidations;

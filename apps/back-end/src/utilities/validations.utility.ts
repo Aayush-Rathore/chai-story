@@ -12,8 +12,10 @@ import {
   TVerifyEmail,
   TObjectId,
   TStoryContent,
+  TPublishStory,
 } from "../types/common.types";
 import commonValidations from "../validations/common.validations";
+import postValidations from "../validations/post.validations";
 
 class Validate {
   private validate<T>(params: T, parseFunction: (params: T) => any): void {
@@ -62,6 +64,13 @@ class Validate {
     this.validate(
       params,
       commonValidations.mdx.parse.bind(commonValidations.mdx)
+    );
+  }
+
+  public PublishStory(params: TPublishStory) {
+    this.validate(
+      params,
+      postValidations.publishStory.parse.bind(postValidations.publishStory)
     );
   }
 }

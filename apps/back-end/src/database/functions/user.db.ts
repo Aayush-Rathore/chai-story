@@ -63,9 +63,18 @@ class UsersDB {
         },
       },
       {
+        $lookup: {
+          from: "stories",
+          localField: "_id",
+          foreignField: "owner",
+          as: "stories",
+        },
+      },
+      {
         $addFields: {
           followersCount: { $size: "$followers" },
           followingCount: { $size: "$following" },
+          storiesCount: { $size: "$stories" },
         },
       },
       {
@@ -77,6 +86,8 @@ class UsersDB {
           isVerified: 1,
           followersCount: 1,
           followingCount: 1,
+          storiesCount: 1,
+          stories: 1,
         },
       },
     ];
@@ -122,6 +133,7 @@ class UsersDB {
     }
 
     const usersDetails = await Users.aggregate<IUser>(pipeline);
+    console.log(usersDetails);
     return usersDetails;
   }
 

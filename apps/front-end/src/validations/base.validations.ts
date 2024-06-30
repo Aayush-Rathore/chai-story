@@ -17,19 +17,10 @@ class BaseValidations {
     .min(6, { message: "Password must be at least 6 characters long" })
     .max(12, { message: "Password must be at most 12 characters long" });
 
-  protected title = zod.string().min(10).max(50);
-  protected categories = zod.enum([
-    "adventure",
-    "romance",
-    "mystery",
-    "scienceFiction",
-    "fantasy",
-    "horror",
-    "historical_Fiction",
-    "drama",
-    "comedy",
-    "thriller",
-  ]);
+  protected storyTitle = zod.string().min(10).max(50);
+  protected storyCategories = zod.string();
+  protected file = zod.instanceof(File).optional();
+  protected storyContent = zod.string();
 }
 
 export default BaseValidations;

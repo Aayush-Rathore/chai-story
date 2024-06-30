@@ -14,6 +14,16 @@ interface UserDetailsResponse {
   data: UserDetails[];
 }
 
+interface Story {
+  _id: string;
+  title: string;
+  thumbnail?: string;
+  mdx: string;
+  likes: number;
+  category: string;
+  liked: boolean;
+}
+
 interface UserDetails {
   _id: string;
   username: string;
@@ -25,6 +35,7 @@ interface UserDetails {
   followingCount: number;
   createdAt: string;
   updatedAt: string;
+  stories: Array<Story>;
 }
 
 const getProfile = async (username: string): Promise<UserDetailsResponse> => {

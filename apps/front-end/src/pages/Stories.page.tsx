@@ -11,15 +11,16 @@ const Stories = () => {
   const [categories, setCategories] = useState("All");
 
   const { data, isLoading, error } = useStories(1, 10, categories);
+  console.log(data);
   return (
     <div>
       <section className="flex items-center py-6 flex-col">
-        <Input
+        {/* <Input
           type="text"
           placeholder="Search"
           className="focus-visible:ring-0 max-w-72 sm:max-w-96 h-10"
         />
-        <Separator className="my-4" />
+        <Separator className="my-4" /> */}
         <div className="flex overflow-x-scroll w-full scroll-m-4 pb-5">
           {Categories.map((category, index) => {
             return (
@@ -45,12 +46,14 @@ const Stories = () => {
                   <StoryCardSkeleton />
                 </div>
               ))
-            : data?.data.map(({ title, _id, category }) => (
+            : data?.data.map(({ title, _id, category, profile, username }) => (
                 <StoryCard
                   title={title}
                   id={_id}
                   key={_id}
                   category={category === "default" ? "Not Mentioned" : category}
+                  profile={profile}
+                  username={username}
                 />
               ))}
         </div>

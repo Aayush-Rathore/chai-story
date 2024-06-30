@@ -22,12 +22,45 @@ class S3Helper {
     return s3;
   }
 
-  public async uploadToS3(fileName: string, storyContent: string) {
+  public async uploadThumbnail(file: Express.Multer.File, fileName: string) {
     try {
       const uploadParams: PutObjectCommandInput = {
         Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: fileName,
-        Body: storyContent,
+        Key: `thumbnails/${fileName}`,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+        ACL: "public-read",
+      };
+
+      const s3 = this.s3Client();
+
+      const upload: Upload = new Upload({
+        client: s3,
+        params: uploadParams,
+      });
+      const metaData = await upload.done();
+
+      return metaData.Location;
+    } catch (error) {
+      console.log(error);
+      throw new ApiError(
+        500,
+        "Auto-Save Failed",
+        "Something went wrong while saving the document",
+        {
+          message: "This error is related to file uploading to the cloud!",
+          error,
+        }
+      );
+    }
+  }
+
+  public async uploadMdx(content: string, fileName: string) {
+    try {
+      const uploadParams: PutObjectCommandInput = {
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: `${fileName}.mdx`,
+        Body: `${content}`,
         ACL: "public-read",
       };
 

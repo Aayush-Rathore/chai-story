@@ -1,18 +1,18 @@
 import { MDXProvider } from "@mdx-js/react";
 import StoryFile from "../constantsVariables/story.mdx";
 import { Button } from "@/components/ui/button";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import defaultPosterLight from "@/assets/defaultPosterLight.svg";
 import defaultPosterDark from "@/assets/defaultPosterDark.svg";
-import StoryCard from "@/components/constants/StoryCard";
 import useStore from "@/store/zustand.store";
 import DialogBox from "@/components/constants/Dialog";
 import { useLike, useStoryWithId, useUnlike } from "@/api/storyFunction";
 import NotFound from "@/components/constants/NotFound";
 
 const Story = () => {
+  const navigate = useNavigate();
   const user = useStore((e) => e.user);
   const { id: storyId } = useParams<{ id: string }>();
 
@@ -61,7 +61,10 @@ const Story = () => {
           />
         </div>
         <div className="w-full">
-          <div className="flex items-start gap-3 h-[72px]">
+          <div
+            className="flex items-start gap-3 h-[72px]"
+            onClick={() => navigate(`/profile/${"buddy"}`)}
+          >
             <Avatar className="mt-1">
               <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
               <AvatarFallback>
@@ -123,20 +126,23 @@ const Story = () => {
         </div>
       </div>
       <div className="flex gap-5">
-        <MDXProvider>
-          <div className="p-4 md:w-3/5 lg:w-[70%]">
-            <h1 className="text-3xl font-bold mb-4">{data.title}</h1>
-            <StoryFile />
-          </div>
-        </MDXProvider>
-        <div className="hidden md:block">
+        {data.mdx && (
+          <MDXProvider>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: data.mdx,
+              }}
+            />
+          </MDXProvider>
+        )}
+        {/* <div className="hidden md:block">
           <h1>More Stories from username</h1>
           <div>
             <StoryCard title="Story Title" id="story" category={"motivation"} />
             <StoryCard title="Story Title" id="story" category={"motivation"} />
             <StoryCard title="Story Title" id="story" category={"motivation"} />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

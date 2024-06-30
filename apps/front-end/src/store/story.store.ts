@@ -1,16 +1,33 @@
-import { create } from "zustand";
-import {} from "";
-
-interface Story {
-  title: string;
-  content: string;
-  category: string;
-}
+import create from "zustand";
 
 interface DraftStories {
-  story: Story[] | null;
-  addStory: (story: Story) => void;
-  removeStory: (index: number) => void;
+  title: string;
+  category: string;
+  content: string;
+  file: File | undefined;
+  setTitle: (value: string) => void;
+  setCategory: (value: string) => void;
+  setContent: (value: string) => void;
+  setFile: (file: File) => void;
+  clear: () => void;
 }
 
-export const draftStories = create<DraftStories>();
+const draftStories = create<DraftStories>((set) => ({
+  title: "",
+  category: "",
+  content: "",
+  file: undefined,
+  setTitle: (value: string) => set({ title: value }),
+  setCategory: (value: string) => set({ category: value }),
+  setContent: (value: string) => set({ content: value }),
+  setFile: (img: File) => set({ file: img }),
+  clear: () =>
+    set({
+      title: "",
+      category: "",
+      content: "",
+      file: undefined,
+    }),
+}));
+
+export default draftStories;

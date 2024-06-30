@@ -1,11 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Categories } from "@/constantsVariables/fixedVariables";
-import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useNavigate, useParams } from "react-router-dom";
 import { useProfile, useUnFollow } from "@/api/userFunctions";
 import useStore from "@/store/zustand.store";
 import { useFollow } from "@/api/userFunctions";
+import StoryCard from "@/components/constants/StoryCard";
 
 const Profile = () => {
   const { username = "" } = useParams();
@@ -13,12 +12,12 @@ const Profile = () => {
   const follow = useFollow();
   const unfollow = useUnFollow();
   const navigate = useNavigate();
-  const [categories, setCategories] = useState("All");
   const { data: userProfile, isLoading } = useProfile(username); // Add isLoading from useProfile hook
   const userData = userProfile?.data[0];
   if (!userData) {
     return;
   }
+  console.log(userData.stories.map((data) => {}));
 
   if (isLoading) {
     // Skeleton loading UI while fetching data
@@ -45,14 +44,6 @@ const Profile = () => {
           <div className="animate-pulse w-24 h-10 bg-gray-300 rounded-full"></div>
         </div>
         <Separator className="my-2" />
-        <div className="flex overflow-x-scroll w-full scroll-m-4 pb-5">
-          {Categories.map((category, index) => (
-            <div
-              key={index}
-              className="animate-pulse bg-gray-300 text-gray-300 mx-1 rounded-md px-4 py-2"
-            ></div>
-          ))}
-        </div>
       </div>
     );
   }
@@ -85,7 +76,9 @@ const Profile = () => {
         <div className="flex justify-center">
           {userData._id === user?.id ? (
             <div className="flex gap-6">
-              <Button>Edit Profile</Button>
+              <Button onClick={() => alert("Feature to be implemented")}>
+                Edit Profile
+              </Button>
               <Button
                 className="bg-secondary hover:scale-105 transition-all hover:bg-secondary"
                 onClick={() => navigate("/editor")}
@@ -115,17 +108,18 @@ const Profile = () => {
       </section>
       <Separator className="my-2" />
       <section className="flex">
-        <div className="flex overflow-x-scroll w-full scroll-m-4 pb-5">
-          {Categories.map((category, index) => (
-            <Button
-              className="bg-secondary text-foreground mx-1 hover:text-white"
-              key={index}
-              onClick={() => setCategories(category)}
-            >
-              {category}
-            </Button>
-          ))}
-        </div>
+        {userData.stories.map((data) => {
+          return (
+            <StoryCard
+              title={data.title}
+              category={data.category}
+              id={data._id}
+              key={data._id}
+              profile={userData.img}
+              username={userData.username}
+            />
+          );
+        })}
       </section>
     </div>
   );

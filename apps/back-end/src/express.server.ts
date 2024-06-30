@@ -6,7 +6,6 @@ import PublicRoutes from "./routers/public.routes";
 import AuthRouters from "./routers/auth.routes";
 import PostRouters from "./routers/post.routes";
 import UserRouters from "./routers/user.routes";
-import FileRouters from "./routers/files.routes";
 import { verifyUser } from "./middleware/authentication.middleware";
 import { asyncHandler } from "./utilities/asyncHandler.utility";
 import session from "express-session";
@@ -46,7 +45,6 @@ class ExpressServer {
     this.app.use("/v1/auth", AuthRouters);
     this.app.use("/v1/post", asyncHandler(verifyUser), PostRouters);
     this.app.use("/v1/user", asyncHandler(verifyUser), UserRouters);
-    this.app.use("/v1/files", asyncHandler(verifyUser), FileRouters);
   }
 
   private useMiddleware() {

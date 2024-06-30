@@ -1,19 +1,13 @@
 import mongoose, { Document, Schema, model } from "mongoose";
 
-export enum StoryCategory {
-  Motivational = "motivational",
-  Romance = "romance",
-  Default = "default",
-}
-
 export interface IStory extends Document {
   title: string;
   thumbnail?: string;
   mdx: string;
   likes: number;
-  category: StoryCategory;
+  category: string;
   owner: mongoose.Types.ObjectId;
-  status: "draft" | "public" | "private";
+  status?: "draft" | "public" | "private";
 }
 
 const StoriesSchema = new Schema(
@@ -31,8 +25,7 @@ const StoriesSchema = new Schema(
 
     category: {
       type: String,
-      enum: Object.values(StoryCategory),
-      dafault: StoryCategory.Default,
+      dafault: "",
     },
 
     thumbnail: {
@@ -51,8 +44,7 @@ const StoriesSchema = new Schema(
 
     status: {
       type: String,
-      default: "draft",
-      required: true,
+      default: "public",
     },
   },
   { timestamps: true }

@@ -21,9 +21,39 @@ class StoriesDB {
     }
 
     pipeline.push({
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "ownerDetails",
+      },
+    });
+
+    pipeline.push({
+      $unwind: "$ownerDetails",
+    });
+
+    pipeline.push({
       $facet: {
         metadata: [{ $count: "totalCount" }],
-        data: [{ $skip: skip }, { $limit: limit }],
+        data: [
+          {
+            $skip: skip,
+          },
+          {
+            $limit: limit,
+          },
+          {
+            $project: {
+              _id: 1,
+              category: 1,
+              owner: 1,
+              title: 1,
+              username: "$ownerDetails.username",
+              profile: "$ownerDetails.img",
+            },
+          },
+        ],
       },
     });
 
@@ -129,6 +159,18 @@ class StoriesDB {
       { new: true }
     );
     return updatedPost;
+  }
+
+  public async postStory(params: {
+    title: string;
+    thumbnail: string;
+    owner: string;
+    mdx: string;
+    category: string;
+    status?: string;
+  }) {
+    const story = await Stories.create(params);
+    return story;
   }
 }
 

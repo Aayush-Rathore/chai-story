@@ -7,6 +7,8 @@ import {
 import { AxiosError, AxiosResponse } from "axios";
 import apiInstance from "./apiInstance";
 import { useToast } from "@/components/ui/use-toast";
+import { TPublishStory } from "@/types/common.types";
+import draftStories from "@/store/story.store";
 
 interface FetchStoriesParams {
   page: number;
@@ -22,6 +24,8 @@ interface Story {
   likes: number;
   category: string;
   liked: boolean;
+  profile: string;
+  username: string;
 }
 
 interface FetchStoriesResponse {
@@ -183,6 +187,46 @@ export const useAutoSave = (): UseMutationResult<
         title: data.successCode,
         description: data.successMessage,
       });
+    },
+    onError: (error: AxiosError<{ error: string; message: string }>) => {
+      toast({
+        title: error.name,
+        description: error.message,
+      });
+    },
+  });
+};
+
+const publish = async (params: TPublishStory): Promise<IPostResponse> => {
+  const response: AxiosResponse<IPostResponse> =
+    await apiInstance.post<IPostResponse>(`/v1/post/publish`, params, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      timeout: 5000,
+    });
+  return response.data;
+};
+
+export const usePublishStory = (): UseMutationResult<
+  IPostResponse,
+  AxiosError<{ error: string; message: string }>,
+  TPublishStory
+> => {
+  const { toast } = useToast();
+  const clear = draftStories((e) => e.clear);
+  return useMutation<
+    IPostResponse,
+    AxiosError<{ error: string; message: string }>,
+    TPublishStory
+  >({
+    mutationFn: publish,
+    onSuccess: (data: IPostResponse) => {
+      toast({
+        title: data.successCode,
+        description: data.successMessage,
+      });
+      clear();
     },
     onError: (error: AxiosError<{ error: string; message: string }>) => {
       toast({
