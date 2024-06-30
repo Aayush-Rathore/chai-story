@@ -1,4 +1,5 @@
 import { useVerification } from "@/api/authFunction";
+import NotFound from "@/components/constants/NotFound";
 import Editor from "@/pages/StoryEditor.page";
 import useStore from "@/store/zustand.store";
 import { lazy, useEffect } from "react";
@@ -37,6 +38,7 @@ const Routers = () => {
       <Route path="/profile/:username" Component={Profile} />
       <Route path="/stories/:id" Component={Story} />
       <Route path="/auth/:token" Component={Verification} />
+      <Route path="*" Component={NotFound} />
       {user && <Route path="/editor" Component={Editor} />}
     </Routes>
   );

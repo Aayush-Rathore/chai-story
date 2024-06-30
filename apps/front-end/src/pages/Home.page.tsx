@@ -6,8 +6,10 @@ import { FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import Footer from "@/components/constants/Footer";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <section className="flex justify-center h-[50dvh] flex-col items-center gap-10 md:gap-16">
@@ -24,7 +26,7 @@ const Home = () => {
         <Button
           variant="default"
           className="w-60 h-12 font-bold text-base"
-          onClick={() => console.log("hello")}
+          onClick={() => navigate("stories")}
         >
           Start Reading
         </Button>
@@ -78,14 +80,14 @@ const Home = () => {
           alive. Together, let's create a world where every story finds its
           voice. Thank you for believing in us!
         </p>
-        <div className="flex w-full max-w-sm items-center space-x-2">
+        {/* <div className="flex w-full max-w-sm items-center space-x-2">
           <Input
             type="email"
             placeholder="Email"
             className="focus-visible:ring-0"
           />
           <Button type="submit">Subscribe</Button>
-        </div>
+        </div> */}
       </section>
       <Footer />
     </div>
