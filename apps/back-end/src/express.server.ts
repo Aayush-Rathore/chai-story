@@ -8,9 +8,8 @@ import PostRouters from "./routers/post.routes";
 import UserRouters from "./routers/user.routes";
 import { verifyUser } from "./middleware/authentication.middleware";
 import { asyncHandler } from "./utilities/asyncHandler.utility";
-import session from "express-session";
-import RedisStore from "connect-redis";
-import redis from "redis";
+// import RedisStore from "connect-redis";
+// import redis from "redis";
 
 class ExpressServer {
   private app: Application;
@@ -77,18 +76,6 @@ class ExpressServer {
     );
 
     this.app.use(cookieParser());
-
-    this.app.use(
-      session({
-        secret: process.env.REDIS_SECRET_KEY,
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-          maxAge: 1000 * 60 * 60 * 24,
-          secure: false,
-        },
-      })
-    );
   }
 
   public startServer() {
