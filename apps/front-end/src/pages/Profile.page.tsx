@@ -17,7 +17,6 @@ const Profile = () => {
   if (!userData) {
     return;
   }
-  console.log(userData.stories.map((data) => {}));
 
   if (isLoading) {
     // Skeleton loading UI while fetching data
@@ -107,7 +106,7 @@ const Profile = () => {
         </div>
       </section>
       <Separator className="my-2" />
-      <section className="flex">
+      <section className="grid justify-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-1 gap-y-5">
         {userData.stories.map((data) => {
           return (
             <StoryCard

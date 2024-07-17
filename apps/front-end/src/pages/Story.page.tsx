@@ -1,7 +1,6 @@
 import { MDXProvider } from "@mdx-js/react";
-import StoryFile from "../constantsVariables/story.mdx";
 import { Button } from "@/components/ui/button";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import defaultPosterLight from "@/assets/defaultPosterLight.svg";
@@ -13,6 +12,8 @@ import NotFound from "@/components/constants/NotFound";
 
 const Story = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { state } = location;
   const user = useStore((e) => e.user);
   const { id: storyId } = useParams<{ id: string }>();
 
@@ -63,10 +64,12 @@ const Story = () => {
         <div className="w-full">
           <div
             className="flex items-start gap-3 h-[72px]"
-            onClick={() => navigate(`/profile/${"buddy"}`)}
+            onClick={() =>
+              navigate(`/profile/${storyData?.authorDetails.username}`)
+            }
           >
             <Avatar className="mt-1">
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarImage src={state.img} alt="@shadcn" />
               <AvatarFallback>
                 {storyData?.authorDetails.username}
               </AvatarFallback>
@@ -74,7 +77,7 @@ const Story = () => {
             <div>
               <div className="break-words overflow-hidden">{data.title}</div>
               <div className="flex flex-row items-center gap-1 text-sm opacity-80">
-                <span>{storyData?.authorDetails.username}</span>&#x2022;
+                <span>{state.author}</span>&#x2022;
                 <span className="text-sm">3h</span>
               </div>
             </div>
@@ -89,7 +92,7 @@ const Story = () => {
               <span>{data.likes} likes</span>
               &#x2022;
             </div>
-            <div className="flex gap-5">
+            <div className="flex gap-5 mb-3">
               {user ? (
                 <Button
                   className={`flex gap-3 ${data.liked ? "bg-primary" : "bg-secondary"}`}

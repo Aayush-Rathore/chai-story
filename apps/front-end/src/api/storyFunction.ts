@@ -11,6 +11,7 @@ import { TPublishStory } from "@/types/common.types";
 import draftStories from "@/store/story.store";
 
 interface FetchStoriesParams {
+  filter: string;
   page: number;
   limit: number;
   category?: string;
@@ -50,6 +51,7 @@ interface IPostResponse {
 }
 
 const fetchStories = async ({
+  filter,
   page,
   limit,
   category,
@@ -57,20 +59,21 @@ const fetchStories = async ({
   const response = await apiInstance.get<FetchStoriesResponse>(
     `/v1/public/home`,
     {
-      params: { page, limit, category },
+      params: { page, limit, category, filter },
     }
   );
   return response.data;
 };
 
 export const useStories = (
+  filter: string,
   page: number,
   limit: number,
   category?: string
 ): UseQueryResult<FetchStoriesResponse> => {
   return useQuery({
     queryKey: ["stories", page, limit, category],
-    queryFn: () => fetchStories({ page, limit, category }),
+    queryFn: () => fetchStories({ filter, page, limit, category }),
     staleTime: Infinity,
   });
 };

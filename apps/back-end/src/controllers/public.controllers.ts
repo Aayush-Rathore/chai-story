@@ -7,8 +7,14 @@ class PublicControllers {
     const page = parseInt(req.query.page as string, 10) || 1;
     const limit = parseInt(req.query.limit as string, 10) || 50;
     const category = req.query.category as string;
+    const filter = req.query.filter as string;
 
-    const stories = await publicServices.HomePageStories(page, limit, category);
+    const stories = await publicServices.HomePageStories(
+      filter,
+      page,
+      limit,
+      category
+    );
     res.send(stories);
   }
 

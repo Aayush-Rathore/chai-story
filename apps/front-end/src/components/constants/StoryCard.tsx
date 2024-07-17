@@ -15,7 +15,7 @@ const StoryCard = ({ title, id, category, profile, username }: TProps) => {
   const navigate = useNavigate();
 
   const HandleClick = () => {
-    navigate(`/stories/${id}`);
+    navigate(`/stories/${id}`, { state: { author: username, img: profile } });
   };
 
   return (

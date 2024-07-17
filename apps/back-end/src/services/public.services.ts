@@ -2,8 +2,14 @@ import userDb from "../database/functions/user.db";
 import storiesDb from "../database/functions/stories.db";
 
 class PublicServices {
-  public async HomePageStories(page: number, limit: number, category: string) {
+  public async HomePageStories(
+    filter: string,
+    page: number,
+    limit: number,
+    category: string
+  ) {
     const stories = await storiesDb.getStories(
+      filter,
       page,
       limit,
       category.toLocaleLowerCase()

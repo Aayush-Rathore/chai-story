@@ -9,6 +9,7 @@ interface IStoryInterface {
 
 class StoriesDB {
   public async getStories(
+    filter: string,
     page: number,
     limit: number,
     category: string
@@ -18,6 +19,15 @@ class StoriesDB {
 
     if (category && category.length > 0 && category !== "all") {
       pipeline.push({ $match: { category } });
+    }
+
+    if (filter && filter.length > 0) {
+      const regex = new RegExp(filter, "i");
+      pipeline.push({
+        $match: {
+          title: { $regex: regex },
+        },
+      });
     }
 
     pipeline.push({
