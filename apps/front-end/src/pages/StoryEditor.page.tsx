@@ -15,8 +15,8 @@ import {
   InsertAdmonition,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
-import WhiteLogo from "@/assets/whiteLogo.svg";
-import BlackLogo from "@/assets/blackLogo.svg";
+// import WhiteLogo from "@/assets/whiteLogo.svg";
+// import BlackLogo from "@/assets/blackLogo.svg";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -48,7 +48,7 @@ const StoryEditor: React.FC = () => {
     setContent,
     setTitle,
     file,
-    setFile,
+    // setFile,
   } = draftStories((e) => e);
 
   const { toast } = useToast();
@@ -56,6 +56,7 @@ const StoryEditor: React.FC = () => {
   const publishStory = usePublishStory();
 
   const [img, setImg] = useState<string | null>(null);
+  console.log(img);
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -92,11 +93,11 @@ const StoryEditor: React.FC = () => {
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      setFile(event.target.files[0]);
-    }
-  };
+  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (event.target.files) {
+  //     setFile(event.target.files[0]);
+  //   }
+  // };
 
   useEffect(() => {
     handleUpload();

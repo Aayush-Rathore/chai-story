@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import hiteshSir from "@/assets/hiteshSir.png";
 import { FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
 import Footer from "@/components/constants/Footer";
 import { useNavigate } from "react-router-dom";
 
