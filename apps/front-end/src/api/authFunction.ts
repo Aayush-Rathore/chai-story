@@ -34,7 +34,8 @@ export const useSignUp = (): UseMutationResult<
   AxiosError<{ error: string; message: string }>,
   TSignUp
 > => {
-  const setUser = useStore((e) => e.setUser);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const setUser = useStore((e: any) => e.setUser);
   const { toast } = useToast();
   return useMutation<
     IAuthResponse,

@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 
 interface DraftStories {
   title: string;
@@ -12,7 +12,8 @@ interface DraftStories {
   clear: () => void;
 }
 
-const draftStories = create<DraftStories>((set) => ({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const draftStories = create<DraftStories>((set: any) => ({
   title: "",
   category: "",
   content: "",

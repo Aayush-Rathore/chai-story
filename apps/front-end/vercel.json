@@ -3,16 +3,20 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/stories", "dest": "/index.html" },
+    { "src": "/profile/:username", "dest": "/index.html" },
+    { "src": "/stories/:id", "dest": "/index.html" },
+    { "src": "/auth/:token", "dest": "/index.html" },
+    { "src": "/editor", "dest": "/index.html" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }

@@ -49,7 +49,7 @@ const StoryEditor: React.FC = () => {
     setTitle,
     file,
     // setFile,
-  } = draftStories((e) => e);
+  } = draftStories((e: any) => e);
 
   const { toast } = useToast();
 

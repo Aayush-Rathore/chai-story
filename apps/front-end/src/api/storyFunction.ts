@@ -217,7 +217,8 @@ export const usePublishStory = (): UseMutationResult<
   TPublishStory
 > => {
   const { toast } = useToast();
-  const clear = draftStories((e) => e.clear);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const clear = draftStories((e: any) => e.clear);
   return useMutation<
     IPostResponse,
     AxiosError<{ error: string; message: string }>,
