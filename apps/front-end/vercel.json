@@ -1,22 +1,11 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "public/**/*",
-      "use": "@vercel/static"
-    }
-  ],
   "routes": [
-    { "src": "/", "dest": "/index.html" },
-    { "src": "/stories", "dest": "/index.html" },
-    { "src": "/profile/:username", "dest": "/index.html" },
-    { "src": "/stories/:id", "dest": "/index.html" },
-    { "src": "/auth/:token", "dest": "/index.html" },
-    { "src": "/editor", "dest": "/index.html" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    { "src": "/stories", "dest": "/" },
+    { "src": "/profile/:username", "dest": "/" },
+    { "src": "/stories/:id", "dest": "/" },
+    { "src": "/auth/:token", "dest": "/" },
+    { "src": "/editor", "dest": "/" },
+    { "src": "/(.*)", "dest": "/" }
   ]
 }
