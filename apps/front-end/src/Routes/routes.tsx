@@ -13,14 +13,15 @@ const Verification = lazy(() => import("@/pages/Verification.page"));
 
 const Routers = () => {
   const { data, status, isLoading } = useVerification();
-  const { setUser, user } = useStore((e) => e);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { setUser, user } = useStore((e: any) => e);
   useEffect(() => {
     if (data && status === "success") {
       setUser({
-        img: data.data.img,
-        id: data.data.id,
-        token: data.data.token,
-        username: data.data.username,
+        img: data.data?.img,
+        id: data.data?.id,
+        token: data.data?.token,
+        username: data.data?.username,
       });
     } else if (!data) {
       console.log("Not verified");

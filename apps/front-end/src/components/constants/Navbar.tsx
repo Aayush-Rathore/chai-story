@@ -15,7 +15,8 @@ import Dropdown from "./Dropdown";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const Navbar = () => {
-  const user = useStore((e) => e.user);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = useStore((e: any) => e.user);
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 justify-between sticky top-0 bg-background shadow-xl z-10 mb-3">
       <Sheet>
@@ -65,7 +66,7 @@ const Navbar = () => {
         </NavigationMenuList>
       </NavigationMenu>
 
-      {!user ? (
+      {!user?.token ? (
         <DialogBox>
           <Button>Login</Button>
         </DialogBox>

@@ -8,7 +8,8 @@ import StoryCard from "@/components/constants/StoryCard";
 
 const Profile = () => {
   const { username = "" } = useParams();
-  const user = useStore((e) => e.user);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = useStore((e: any) => e.user);
   const follow = useFollow();
   const unfollow = useUnFollow();
   const navigate = useNavigate();

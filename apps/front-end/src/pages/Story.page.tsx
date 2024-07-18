@@ -14,7 +14,8 @@ const Story = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
-  const user = useStore((e) => e.user);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = useStore((e: any) => e.user);
   const { id: storyId } = useParams<{ id: string }>();
 
   if (!storyId) {

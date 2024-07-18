@@ -17,7 +17,8 @@ export default function Dropdown({
   username: string;
 }) {
   const navigate = useNavigate();
-  const clearUser = useStore((e) => e.clearUser);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const clearUser = useStore((e: any) => e.clearUser);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>

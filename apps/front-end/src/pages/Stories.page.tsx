@@ -24,6 +24,7 @@ const Stories = () => {
   const [categories, setCategories] = useState("All");
   const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [stories, setStories] = useState<any[]>([]);
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
 
@@ -106,7 +107,7 @@ const Stories = () => {
       <section className="my-4">
         <h1 className="text-3xl philosopher-bold my-2 mb-10">{categories}</h1>
         <div className="grid justify-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-1 gap-y-5">
-          {isLoading
+          {isLoading || !stories
             ? Array.from({ length: 10 }).map((_, index) => (
                 <div key={index} className="w-full p-4">
                   <StoryCardSkeleton />
