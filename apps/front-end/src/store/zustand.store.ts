@@ -13,10 +13,9 @@ interface UserState {
   clearUser: () => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const useStore = create<UserState>((set: any) => ({
+const useStore = create<UserState>((set) => ({
   user: null,
-  setUser: (user) => set({ user }),
+  setUser: (user: User | null) => set({ user }),
   clearUser: () => set({ user: null }),
 }));
 
