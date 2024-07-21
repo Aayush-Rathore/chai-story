@@ -17,17 +17,17 @@ const draftStories = create<DraftStories>((set) => ({
   category: "",
   content: "",
   file: undefined,
-  setTitle: (value: string) => set({ title: value }),
-  setCategory: (value: string) => set({ category: value }),
-  setContent: (value: string) => set({ content: value }),
-  setFile: (img: File) => set({ file: img }),
+  setTitle: (value: string) => set(() => ({ title: value })),
+  setCategory: (value: string) => set(() => ({ category: value })),
+  setContent: (value: string) => set(() => ({ content: value })),
+  setFile: (img: File) => set(() => ({ file: img })),
   clear: () =>
-    set({
+    set(() => ({
       title: "",
       category: "",
       content: "",
       file: undefined,
-    }),
+    })),
 }));
 
 export default draftStories;
