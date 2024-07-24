@@ -39,16 +39,14 @@ const Stories = () => {
   const handleSearchChange = useCallback(
     debounce(() => {
       setPage(1);
-      setStories([]);
+      // setStories([]);
       refetch();
     }, 400),
     []
   );
 
   useEffect(() => {
-    if (data && page === 1) {
-      setStories(data.data);
-    } else if (data && page > 1) {
+    if (data) {
       setStories((prevStories) => [...prevStories, ...data.data]);
     }
   }, [data, page]);

@@ -200,7 +200,7 @@ const StoryEditor: React.FC = () => {
               directiveDescriptors: [AdmonitionDirectiveDescriptor],
             }),
           ]}
-          contentEditableClassName="bg-white text-black rounded"
+          contentEditableClassName="bg-secondary text-white font-medium rounded h-[48dvh] overflow-scroll"
         />
       </div>
       <div className="flex justify-between items-center flex-row gap-3">

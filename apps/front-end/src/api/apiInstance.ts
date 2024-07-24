@@ -5,7 +5,7 @@ const apiInstance = axios.create({
   withCredentials: true,
   timeout: 1500,
   headers: {
-    Authorization: "123123",
+    Authorization: document.cookie,
   },
 });
 
